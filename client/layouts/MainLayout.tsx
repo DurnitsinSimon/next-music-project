@@ -1,4 +1,3 @@
-import { Container } from '@mui/material';
 import React, { FC } from 'react';
 import Navbar from '../components/Navbar';
 import Player from '../components/Player';

@@ -7,7 +7,6 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -17,21 +16,20 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { Link } from '@mui/material';
 import { useRouter } from 'next/dist/client/router';
 
 const drawerWidth = 240;
 
 interface IMenuItem {
-    text: string;
-    href: string;
+	text: string;
+	href: string;
 }
 
 const menuItems: IMenuItem[] = [
-    {text: 'Главная', href: '/'},
-    {text: 'Плеер', href: '/tracks'},
-    {text: 'Альбомы', href: '/albums'}
-]
+	{ text: 'Главная', href: '/' },
+	{ text: 'Плеер', href: '/tracks' },
+	{ text: 'Альбомы', href: '/albums' },
+];
 
 interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
@@ -66,7 +64,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Navbar() {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
-    const router = useRouter()
+	const router = useRouter();
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
