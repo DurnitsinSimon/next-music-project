@@ -7,12 +7,14 @@ import {
   Post,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ObjectId } from 'mongoose';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { TrackService } from './track.service';
@@ -21,6 +23,7 @@ import { TrackService } from './track.service';
 export class TrackController {
   constructor(private trackService: TrackService) {}
 
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
   @Post()
   @UseInterceptors(

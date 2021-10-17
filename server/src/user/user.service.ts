@@ -1,16 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare, genSaltSync, hashSync } from 'bcryptjs';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto.';
 import { User, UserDocument } from './schemas/user.schema';
+import { ALREADY_CREATED_USER, NOT_VALID_PASSWORD, USER_NOT_FOUND } from './user.constants';
+
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
     async create(dto: CreateUserDto): Promise<User> {
-        const oldUser = await this.findUserByEmail(dto.email);
+        const oldUser = await this.userModel.findOne({email: dto.email});
         if(oldUser) {
             throw new HttpException(ALREADY_CREATED_USER, HttpStatus.BAD_REQUEST);
         }
@@ -28,7 +30,7 @@ export class UserService {
     async findUserByEmail(email: string): Promise<User> {
         const user = await this.userModel.findOne({email});
         if(!user) {
-            throw new HttpException(USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            throw new BadRequestException(USER_NOT_FOUND);
         }
         return user;
     }
