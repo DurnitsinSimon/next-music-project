@@ -8,6 +8,8 @@ export enum FileType {
   IMAGE = 'image',
 }
 
+
+
 @Injectable()
 export class FileService {
   createFile(type: FileType, file: Express.Multer.File): string {
@@ -15,6 +17,8 @@ export class FileService {
       const fileExtension = file.originalname.split('.').pop();
       const fileName = v4() + '.' + fileExtension;
       const filePath = path.resolve(__dirname, '..', 'static', type);
+      console.log(__dirname);
+      
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath, { recursive: true });
       }

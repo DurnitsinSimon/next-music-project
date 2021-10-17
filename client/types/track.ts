@@ -24,7 +24,7 @@ export enum TrackActionTypes {
 
 interface FetchTrackAction {
     type: TrackActionTypes.FETCH_TRACKS;
-    payload: ITrack[];
+    payload: ITrack[] | object;
 }
 
 interface FetchTrackErrorAction {

@@ -18,6 +18,9 @@ export class Album {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Track' }] })
   tracks: Track[];
+
+  @Prop()
+  listens: number;
 }
 
-export const TrackSchema = SchemaFactory.createForClass(Album);
+export const AlbumSchema = SchemaFactory.createForClass(Album);

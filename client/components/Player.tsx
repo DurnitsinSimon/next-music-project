@@ -10,23 +10,14 @@ import TrackProgress from './TrackProgress';
 let audio;
 
 const Player: FC = () => {
-	const track: ITrack = {
-		_id: '1',
-		name: 'Track 1',
-		artist: 'dj khalid',
-		listens: 5,
-		text: 'content',
-		comments: [],
-		picture: 'http://localhost:5050/image/0773460b-4c62-41cc-9274-d1cd49456ee2.png',
-		audio: 'http://localhost:5050/audio/d3acaf28-93e8-4122-9d55-994f4ea5e67c.mp3',
-	};
+	
 
 	const { pause, duration, volume, currentTime, active } = useTypedSelector((state) => state.player);
 	const { playTrack, pauseTrack, setVolume, setCurrentTime, setDuration } = useActions();
 
 	const setAudio = () => {
 		audio = new Audio();
-		audio.src = active?.audio;
+		audio.src = 'http://localhost:5050/' + active?.audio;
 		audio.volume = volume / 100;
 		audio.onloadedmetadata = () => {
 			setDuration(Math.ceil(audio.duration));
@@ -35,7 +26,6 @@ const Player: FC = () => {
 			setCurrentTime(Math.ceil(audio.currentTime));
 		};
 	};
-	console.log(pause);
 	useEffect(() => {
 		 
 		if (!audio) {

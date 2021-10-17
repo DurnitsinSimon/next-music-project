@@ -15,7 +15,11 @@ export class TrackService {
     private fileService: FileService,
   ) {}
 
-  async create(dto: CreateTrackDto, picture, audio): Promise<Track> {
+  async create(
+    dto: CreateTrackDto,
+    picture: Express.Multer.File,
+    audio: Express.Multer.File,
+  ): Promise<Track> {
     const audioPath = this.fileService.createFile(FileType.AUDIO, audio);
     const picturePath = this.fileService.createFile(FileType.IMAGE, picture);
     const track = await this.trackModel.create({
@@ -40,7 +44,7 @@ export class TrackService {
 
   async search(query: string): Promise<Track[]> {
     const tracks = await this.trackModel.find({
-      name: {$regex: new RegExp(query)}
+      name: { $regex: new RegExp(query) },
     });
     return tracks;
   }

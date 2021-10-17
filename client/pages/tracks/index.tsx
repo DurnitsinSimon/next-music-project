@@ -1,54 +1,53 @@
-import { Button, Card, Grid } from '@mui/material';
+import { Button, Card, Grid, TextField } from '@mui/material';
 import { useRouter } from 'next/dist/client/router';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import TrackList from '../../components/TrackList';
+import { useTypedSelector } from '../../hooks/useAction';
 import MainLayout from '../../layouts/MainLayout';
-import { ITrack } from '../../types/track';
+import { NextThunkDispatch, wrapper } from '../../store';
+import { fetchTracks, searchTracks } from '../../store/actions-creators/track';
+
+export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
+	const dispatch = store.dispatch as NextThunkDispatch;
+	await dispatch(fetchTracks());
+});
 
 const Index = () => {
 	const router = useRouter();
-	
-	const tracks: ITrack[] = [
-		{
-			_id: '1',
-			name: 'Track 1',
-			artist: 'dj khalid',
-			listens: 5,
-			text: 'content',
-			comments: [],
-			picture: 'http://localhost:5050/image/0773460b-4c62-41cc-9274-d1cd49456ee2.png',
-			audio: 'http://localhost:5050/audio/d3acaf28-93e8-4122-9d55-994f4ea5e67c.mp3',
-		},
-		{
-			_id: '2',
-			name: 'Track 2',
-			artist: 'dj khalid',
-			listens: 5,
-			text: 'content',
-			comments: [],
-			picture: 'http://localhost:5050/image/0773460b-4c62-41cc-9274-d1cd49456ee2.png',
-			audio: 'http://localhost:5050/audio/d3acaf28-93e8-4122-9d55-994f4ea5e67c.mp3',
-		},
-		{
-			_id: '3',
-			name: 'Track 3',
-			artist: 'dj khalid',
-			listens: 5,
-			text: 'content',
-			comments: [],
-			picture: 'http://localhost:5050/image/0773460b-4c62-41cc-9274-d1cd49456ee2.png',
-			audio: 'http://localhost:5050/audio/d3acaf28-93e8-4122-9d55-994f4ea5e67c.mp3',
-		},
-	];
+	const [query, setQuery] = useState<string>('');
+	const { tracks, error } = useTypedSelector((state) => state.tracks);
 
+	const dispatch = useDispatch();
+	const [timer, setTimer] = useState(null);
+	const search = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		setQuery(e.target.value);
+		if (timer) {
+			clearTimeout(timer);
+		}
+		setTimer(
+			setTimeout(async () => {
+				await dispatch(await searchTracks(e.target.value));
+			})
+		);
+	};
+
+	if (error) {
+		return (
+			<MainLayout>
+				<h1>{error}</h1>
+			</MainLayout>
+		);
+	}
 	return (
-		<MainLayout>
+		<MainLayout title={'Список треков - музыкальная платформа'}>
 			<Grid container justifyContent='center'>
 				<Card style={{ width: '900px', padding: '20px' }}>
 					<Grid container justifyContent='space-between'>
 						<h1>Список треков</h1>
 						<Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
 					</Grid>
+					<TextField fullWidth value={query} onChange={search} />
 					<TrackList tracks={tracks} />
 				</Card>
 			</Grid>
