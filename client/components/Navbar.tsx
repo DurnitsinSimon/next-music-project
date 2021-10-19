@@ -28,7 +28,7 @@ interface IMenuItem {
 const menuItems: IMenuItem[] = [
 	{ text: 'Главная', href: '/' },
 	{ text: 'Плеер', href: '/tracks' },
-	{ text: 'Альбомы', href: '/albums' },
+	{ text: 'Favorite tracks', href: '/favoriteTracks' },
 ];
 
 interface AppBarProps extends MuiAppBarProps {

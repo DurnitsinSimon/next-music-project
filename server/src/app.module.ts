@@ -5,8 +5,8 @@ import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { AlbumModule } from './album/album.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 
 
@@ -18,9 +18,14 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: '24h',
+      },
+    }),
     TrackModule,
     FileModule,
-    AlbumModule,
     MongooseModule.forRoot(process.env.DB_URL),
     AuthModule,
    
