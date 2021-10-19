@@ -50,7 +50,10 @@ export class UserService {
   }
 
   async validateUser(dto: CreateUserDto): Promise<User> {
-    const user = await this.findUserByEmail(dto.email);
+    const user = await this.userModel.findOne({email: dto.email}).populate('favoriteTracks');
+    if (!user) {
+      throw new BadRequestException(USER_NOT_FOUND);
+    }
     const isCorrectPassword = await compare(dto.password, user.passwordHash);
     if (!isCorrectPassword) {
       throw new HttpException(NOT_VALID_PASSWORD, HttpStatus.BAD_REQUEST);

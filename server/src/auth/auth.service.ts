@@ -13,16 +13,29 @@ export class AuthService {
 
   async login(dto: CreateUserDto) {
     const user = await this.userService.validateUser(dto);
-    return this.generateToken(user);
+    
+    return {
+      token: await this.generateToken(user),
+      user: {
+        email: user.email,
+        favoriteTracks: user.favoriteTracks
+      }
+    };
   }
 
   async registration(dto: CreateUserDto) {
     const user = await this.userService.create(dto);
-    return this.generateToken(user);
+    return {
+      token: await this.generateToken(user),
+      user: {
+        email: user.email,
+        favoriteTracks: user.favoriteTracks
+      }
+    };
   }
 
   async generateToken(user: User) {
-    const payload = { email: user.email};
+    const payload = { email: user.email, favoriteTracks: user.favoriteTracks};
     return {
       token: this.jwtService.sign(payload),
     };
